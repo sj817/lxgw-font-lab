@@ -1,0 +1,23 @@
+{
+  "lxgw/LxgwWenKai": {
+    "tag": "v1.522",
+    "files": {
+      "LXGWWenKai-Light.ttf": "526ec70cbb0118e871d481f8179e03ff045f0e4d72d080dcca87950c4ab27cca",
+      "LXGWWenKai-Regular.ttf": "39ad71264b588165b469e35e6afb162a378dacd1f95348160240ba9038ac3009",
+      "LXGWWenKai-Medium.ttf": "d4bdeb38a39151d74d084cba5090f8cb7d20bf83eedb78c35939ae70b9f4e3f6",
+      "LXGWWenKaiMono-Regular.ttf": "bc068e4e395c396f2909ffdfac3a3751578b73ed3d64a79c9c31bfa84e43debe"
+    }
+  },
+  "lxgw/LxgwNeoXiHei": {
+    "tag": "v1.305",
+    "files": {
+      "LXGWNeoXiHei.ttf": "893cfbec604768f03785ab4f369508de68c274273359a5cadee17e2852975d5c"
+    }
+  },
+  "lxgw/LxgwNeoZhiSong": {
+    "tag": "v1.067",
+    "files": {
+      "LXGWNeoZhiSong.ttf": "32b398f9c6278c4ed34f413077add2c2f3c84034d463af2b9cb98f12c4c2c6cd"
+    }
+  }
+}
