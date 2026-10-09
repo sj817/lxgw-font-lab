@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>霞鹜字体实测</title>
-<meta name="description" content="霞鹜文楷、新晰黑、新致宋的网页实测：字重、长文阅读、界面组件、表单、数据表格与移动端">
+<meta name="description" content="霞鹜文楷、新晰黑、新致宋，以及 MiSans、HarmonyOS Sans 的网页实测：字重、长文阅读、界面组件、表单、数据表格与移动端">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23eef0f3'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='%23334155' font-family='serif'%3E%E6%96%87%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -253,6 +253,7 @@
 
 :root[data-font="wenkai"] { --w-head: 500; --w-strong: 500; --w-display: 500; }
 :root[data-font="xihei"], :root[data-font="zhisong"] { --w-head: 700; --w-strong: 700; --w-display: 400; }
+:root[data-font="misans"], :root[data-font="harmony"] { --w-head: 500; --w-strong: 700; --w-display: 700; }
 :root[data-font="system"] { --w-head: 600; --w-strong: 600; --w-display: 600; }
 :root.no-synth { font-synthesis: none; }
 
@@ -304,7 +305,7 @@ img, svg { max-width: 100%; }
 .brand-mark { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 20px; font-weight: var(--w-display); line-height: 1; flex: none; }
 .brand-name { font-size: 15px; font-weight: var(--w-head); white-space: nowrap; }
 .nav-links { display: flex; gap: 2px; margin-inline: auto; }
-.nav-links a { padding: 7px 11px; border-radius: 999px; color: var(--text-2); font-size: 13.5px; white-space: nowrap; }
+.nav-links a { padding: 7px 9px; border-radius: 999px; color: var(--text-2); font-size: 13.5px; white-space: nowrap; }
 .nav-links a:hover { background: var(--hover); color: var(--text); text-decoration: none; }
 .nav-links a[aria-current="true"] { background: var(--surface-3); color: var(--text); }
 .nav-right { display: flex; align-items: center; gap: 6px; margin-left: auto; }
@@ -326,12 +327,12 @@ img, svg { max-width: 100%; }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
 .seg button:disabled { opacity: 0.4; cursor: not-allowed; }
 .seg-sm button { padding: 4px 10px; font-size: var(--t-xs); }
-.font-seg button { font-size: 14px; }
+.font-seg button { font-size: 14px; padding-inline: 11px; }
 
 /* Mobile dock */
 .dock { display: none; position: fixed; z-index: 60; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); align-items: center; gap: 6px; padding: 6px; border-radius: 999px; background: var(--glass-strong); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); border: 1px solid var(--border); box-shadow: var(--shadow-lg); width: max-content; max-width: calc(100% - 24px); }
 .dock .seg { background: transparent; padding: 0; }
-.dock .seg button { font-size: 15px; padding: 8px 12px; }
+.dock .seg button { font-size: 15px; padding: 8px 7px; }
 
 /* Preferences */
 .prefs-scrim { position: fixed; inset: 0; z-index: 70; background: var(--scrim); }
@@ -407,7 +408,7 @@ img, svg { max-width: 100%; }
 /* ---------- Compare ---------- */
 .cmp-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 24px; align-items: start; }
 .cmp-knobs { display: grid; gap: 12px; min-width: 240px; }
-.cmp-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.cmp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
 .cmp { align-content: start; }
 .cmp-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .cmp-name { font-size: 22px; font-weight: 400; }
@@ -915,10 +916,13 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
 @keyframes toast-out { to { opacity: 0; transform: translateX(16px); } }
 
 /* ---------- Breakpoints ---------- */
-@media (max-width: 1180px) {
+/* Nine section links plus six font buttons only fit once the bar reaches its full 1240px */
+@media (max-width: 1260px) {
   .nav-links { display: none; }
   .nav .toc-wrap { display: inline-block; margin-left: auto; }
   .nav-right { margin-left: 0; }
+}
+@media (max-width: 1180px) {
   .reader { grid-template-columns: minmax(0, 1fr) 220px; }
   .toc { display: none; }
   .cmp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -936,6 +940,9 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
   .cmp-controls { grid-template-columns: 1fr; }
   .load-pill .lp-text { display: none; }
   .load-pill { padding: 0 13px; }
+}
+@media (min-width: 641px) and (max-width: 740px) {
+  .brand-name { display: none; }
 }
 @media (max-width: 640px) {
   .nav { padding: 6px 6px 6px 8px; }
@@ -966,6 +973,7 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
 }
 @media (max-width: 380px) {
   .brand-name { display: none; }
+  .dock .seg button { font-size: 14px; padding-inline: 5px; }
   .kpis { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1044,7 +1052,7 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
     <button class="btn btn-ghost btn-sm" id="toc-btn" aria-haspopup="true" aria-expanded="false" aria-controls="toc-menu"><svg class="ic"><use href="#i-menu"/></svg>目录</button>
     <div class="menu" id="toc-menu" hidden>
       <a class="menu-item" href="#specimen">字样</a>
-      <a class="menu-item" href="#compare">三体对照</a>
+      <a class="menu-item" href="#compare">字体对照</a>
       <a class="menu-item" href="#type">排版细节</a>
       <a class="menu-item" href="#reading">长文阅读</a>
       <a class="menu-item" href="#ui">界面组件</a>
@@ -1059,6 +1067,8 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
       <button data-set-font="wenkai">文楷</button>
       <button data-set-font="xihei">新晰黑</button>
       <button data-set-font="zhisong">新致宋</button>
+      <button data-set-font="misans">MiSans</button>
+      <button data-set-font="harmony">鸿蒙</button>
       <button data-set-font="system">系统</button>
     </div>
     <button class="load-pill" id="load-pill" data-state="idle" data-open-prefs title="字体加载状态"><span class="ld"></span><span class="lp-text" id="load-text">准备加载</span></button>
@@ -1071,6 +1081,8 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
     <button data-set-font="wenkai">文楷</button>
     <button data-set-font="xihei">晰黑</button>
     <button data-set-font="zhisong">致宋</button>
+    <button data-set-font="misans">小米</button>
+    <button data-set-font="harmony">鸿蒙</button>
     <button data-set-font="system">系统</button>
   </div>
   <button class="icon-btn" data-open-prefs aria-label="显示设置"><svg class="ic"><use href="#i-sliders"/></svg></button>
@@ -1087,7 +1099,7 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
     <div class="font-list" id="pref-fonts"></div>
   </div>
   <div class="pref">
-    <span class="pref-label">文楷正文字重<output id="pref-wk-note">仅文楷有三个字重</output></span>
+    <span class="pref-label">文楷正文字重<output id="pref-wk-note">仅对文楷生效</output></span>
     <div class="seg" id="pref-wk" role="group" aria-label="文楷正文字重">
       <button data-v="300">Light</button>
       <button data-v="400">Regular</button>
@@ -1125,7 +1137,7 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
   <p class="pref-vp" id="pref-vp">视口</p>
   <div class="row">
     <button class="btn btn-ghost btn-sm" id="pref-reset"><svg class="ic"><use href="#i-refresh"/></svg>恢复默认</button>
-    <span class="mini">快捷键 <kbd>1</kbd>–<kbd>4</kbd> 切换字体</span>
+    <span class="mini">快捷键 <kbd>1</kbd>–<kbd>6</kbd> 切换字体</span>
   </div>
 </aside>
 
@@ -1186,9 +1198,9 @@ dialog.dlg[open] { animation: pop-in 0.28s var(--ease); }
 <!-- ============ 对照 ============ -->
 <section class="sec" id="compare">
   <header class="sec-head">
-    <p class="eyebrow">Compare · 三体对照</p>
-    <h2>同一段话，四种声音</h2>
-    <p class="lead">三款霞鹜字体加上你设备自带的中文字体并排显示。改动下面的文字会同时更新四栏；子集里没有的字会用红色虚线标出来，方便一眼看出缺字</p>
+    <p class="eyebrow">Compare · 字体对照</p>
+    <h2>同一段话，六种声音</h2>
+    <p class="lead">三款霞鹜字体、MiSans、HarmonyOS Sans，再加上你设备自带的中文字体并排显示。改动下面的文字会同时更新六栏；子集里没有的字会用红色虚线标出来，方便一眼看出缺字</p>
   </header>
   <div class="card cmp-controls">
     <div class="field">
@@ -1232,6 +1244,18 @@ The quick brown fox jumps over the lazy dog. 0123456789
       <div class="cmp-text"></div>
       <p class="cmp-foot" data-miss-for="zhisong"></p>
     </article>
+    <article class="card cmp" data-cmp="misans">
+      <header class="cmp-head"><h3 class="cmp-name">MiSans</h3><span class="badge" data-status-for="misans">等待</span></header>
+      <p class="cmp-sub">MiSans · 黑体</p>
+      <div class="cmp-text"></div>
+      <p class="cmp-foot" data-miss-for="misans"></p>
+    </article>
+    <article class="card cmp" data-cmp="harmony">
+      <header class="cmp-head"><h3 class="cmp-name">HarmonyOS Sans</h3><span class="badge" data-status-for="harmony">等待</span></header>
+      <p class="cmp-sub">HarmonyOS Sans SC · 黑体</p>
+      <div class="cmp-text"></div>
+      <p class="cmp-foot" data-miss-for="harmony"></p>
+    </article>
     <article class="card cmp" data-cmp="system">
       <header class="cmp-head"><h3 class="cmp-name">系统字体</h3><span class="badge">本机</span></header>
       <p class="cmp-sub" id="sys-sub">System UI · 对照基准</p>
@@ -1266,12 +1290,8 @@ The quick brown fox jumps over the lazy dog. 0123456789
     </article>
 
     <article class="card" id="weights-card">
-      <div class="card-head"><div><h3>字重</h3><p>文楷是唯一自带三个字重的</p></div><span class="meta">WEIGHT</span></div>
-      <div class="weights" id="wk-weights">
-        <div class="w-row"><span class="meta">Light 300</span><p class="wk-fixed" style="font-weight:300">永和九年，岁在癸丑 Aa 123</p></div>
-        <div class="w-row"><span class="meta">Regular 400</span><p class="wk-fixed" style="font-weight:400">永和九年，岁在癸丑 Aa 123</p></div>
-        <div class="w-row"><span class="meta">Medium 500</span><p class="wk-fixed" style="font-weight:500">永和九年，岁在癸丑 Aa 123</p></div>
-      </div>
+      <div class="card-head"><div><h3>字重</h3><p id="weights-sub">文楷、MiSans、HarmonyOS Sans 各取了三个字重</p></div><span class="meta">WEIGHT</span></div>
+      <div class="weights" id="own-weights"></div>
       <div class="divider"></div>
       <p class="mini" id="synth-title">当前字体的加粗方式</p>
       <div class="weights">
@@ -1809,6 +1829,8 @@ The quick brown fox jumps over the lazy dog. 0123456789
               <label class="rcard"><input type="radio" name="ui-font" value="wenkai"><span class="rc-glyph" data-font-sample="wenkai">永</span><span class="rc-name">霞鹜文楷</span><span class="rc-meta">3 WEIGHTS · OFL</span></label>
               <label class="rcard"><input type="radio" name="ui-font" value="xihei"><span class="rc-glyph" data-font-sample="xihei">永</span><span class="rc-name">霞鹜新晰黑</span><span class="rc-meta">1 WEIGHT · IPA</span></label>
               <label class="rcard"><input type="radio" name="ui-font" value="zhisong"><span class="rc-glyph" data-font-sample="zhisong">永</span><span class="rc-name">霞鹜新致宋</span><span class="rc-meta">1 WEIGHT · IPA</span></label>
+              <label class="rcard"><input type="radio" name="ui-font" value="misans"><span class="rc-glyph" data-font-sample="misans">永</span><span class="rc-name">MiSans</span><span class="rc-meta">3 WEIGHTS · 小米</span></label>
+              <label class="rcard"><input type="radio" name="ui-font" value="harmony"><span class="rc-glyph" data-font-sample="harmony">永</span><span class="rc-name">HarmonyOS Sans</span><span class="rc-meta">3 WEIGHTS · 华为</span></label>
             </div>
           </fieldset>
           <div class="field">
@@ -1899,7 +1921,7 @@ The quick brown fox jumps over the lazy dog. 0123456789
 
   <div class="grid-2">
     <article class="card">
-      <div class="card-head"><div><h3>本页字体子集体积</h3><p>第一层内嵌在页面里，另两层按需下载</p></div><span class="meta" id="sizes-total">—</span></div>
+      <div class="card-head"><div><h3>本页字体子集体积</h3><p>霞鹜的第一层内嵌在页面里，其余都按需下载</p></div><span class="meta" id="sizes-total">—</span></div>
       <div class="legend"><span><i class="a"></i>本页用字</span><span><i class="b1"></i>GB2312 一级</span><span><i class="b2"></i>GB2312 二级</span></div>
       <div class="sizes" id="sizes"><p class="mini">正在读取字体清单…</p></div>
     </article>
@@ -2017,7 +2039,7 @@ The quick brown fox jumps over the lazy dog. 0123456789
   <header class="sec-head">
     <p class="eyebrow">License · 授权与来源</p>
     <h2>字体来自哪里，可以怎么用</h2>
-    <p class="lead">本页从各仓库的 GitHub Releases 下载原始 TTF，用 fontTools 裁成 woff2 子集，没有修改任何字形</p>
+    <p class="lead">霞鹜字体取自各仓库的 GitHub Releases，MiSans 和 HarmonyOS Sans 取自小米、华为官网的字体包，都用 fontTools 裁成 woff2 子集，没有修改任何字形</p>
   </header>
   <div class="grid-3">
     <article class="card lic">
@@ -2056,6 +2078,28 @@ The quick brown fox jumps over the lazy dog. 0123456789
       </dl>
       <p class="note">换回原始字体：从 <code>moji.or.jp/ipafont/ipafontdownload</code> 下载 IPAex 明朝 安装到本机，再在本页选择「系统」并把它设为系统字体即可。To replace this font with the original IPA font, get it from https://moji.or.jp/ipafont/ipafontdownload/</p>
     </article>
+    <article class="card lic">
+      <h3 data-font-sample="misans">MiSans</h3>
+      <dl class="dl">
+        <dt>出品</dt><dd>小米 · 汉仪</dd>
+        <dt>版本</dt><dd class="num">v4.009 · 2025-01-23</dd>
+        <dt>授权</dt><dd><a href="https://hyperos.mi.com/font/zh/download/" target="_blank" rel="noopener">MiSans 字体知识产权许可协议</a></dd>
+        <dt>官网</dt><dd><a href="https://hyperos.mi.com/font/" target="_blank" rel="noopener">hyperos.mi.com/font</a></dd>
+        <dt>本页文件</dt><dd class="num" data-lic-size="misans">—</dd>
+      </dl>
+      <p class="note">本页使用了 MiSans 字体。可以免费商用，也可以作为网页嵌入字体，但不得改变字形外观，也不得单独分发或售卖字体文件</p>
+    </article>
+    <article class="card lic">
+      <h3 data-font-sample="harmony">HarmonyOS Sans</h3>
+      <dl class="dl">
+        <dt>出品</dt><dd>华为 · 汉仪</dd>
+        <dt>版本</dt><dd class="num">v1.0 · 2021-06-02</dd>
+        <dt>授权</dt><dd><a href="fonts/HarmonyOS-Sans-License.txt" target="_blank" rel="noopener">HarmonyOS Sans Fonts License Agreement</a></dd>
+        <dt>官网</dt><dd><a href="https://developer.huawei.com/consumer/cn/design/resource/" target="_blank" rel="noopener">华为开发者联盟 · 设计资源</a></dd>
+        <dt>本页文件</dt><dd class="num" data-lic-size="harmony">—</dd>
+      </dl>
+      <p class="note">本页使用了 HarmonyOS Sans 字体。可以免费商用，可以嵌入软件一起分发，但不得修改字体，也不得单独分发或售卖字体文件。Copyright 2021 Huawei Device Co., Ltd.</p>
+    </article>
   </div>
   <div class="card">
     <div class="row" style="justify-content:space-between">
@@ -2064,7 +2108,7 @@ The quick brown fox jumps over the lazy dog. 0123456789
     </div>
   </div>
   <footer class="foot">
-    <span>字体版权归原作者落霞孤鹜（LXGW）及原始字体的权利人所有 · 本页仅用于效果测试</span>
+    <span>霞鹜字体版权归落霞孤鹜（LXGW）及原始字体的权利人所有，MiSans 版权归小米，HarmonyOS Sans 版权归华为 · 本页仅用于效果测试</span>
     <span class="meta">生成于 __BUILD_DATE__ · fontTools 子集</span>
   </footer>
 </section>
@@ -2130,6 +2174,18 @@ The quick brown fox jumps over the lazy dog. 0123456789
       fallback: '"Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif',
       desc: '衍生自 IPAex 明朝与 IPAmj 明朝，是新晰黑的姊妹字体。横细竖粗，带着刻本的骨架，适合长文与标题'
     },
+    misans: {
+      key: 'misans', name: 'MiSans', short: 'MiSans', latin: 'MiSans', ver: 'v4.009', license: 'MiSans 字体知识产权许可协议',
+      prefix: 'misans', weights: [400, 500, 700], weightText: 'Regular · Medium · Bold',
+      fallback: SYS_SANS,
+      desc: '小米 HyperOS 的系统字体，小米与汉仪联合设计，定位是「简约清晰、人文易读」。完整家族有 Thin 到 Heavy 十个字重，本页取了其中三个'
+    },
+    harmony: {
+      key: 'harmony', name: 'HarmonyOS Sans', short: '鸿蒙', latin: 'HarmonyOS Sans SC', ver: 'v1.0', license: 'HarmonyOS Sans Fonts License',
+      prefix: 'harmonyos-sans', weights: [400, 500, 700], weightText: 'Regular · Medium · Bold',
+      fallback: SYS_SANS,
+      desc: '华为 HarmonyOS 的系统字体，华为与汉仪联合设计，2021 年发布。完整家族有 Thin 到 Black 六个字重，本页取了其中三个'
+    },
     system: {
       key: 'system', name: '系统字体', short: '系统', latin: 'System UI', ver: '本机', license: '随操作系统',
       prefix: null, weights: [], weightText: '取决于设备',
@@ -2137,8 +2193,10 @@ The quick brown fox jumps over the lazy dog. 0123456789
       desc: '不加载任何网络字体，直接使用设备自带的中文字体：Windows 上通常是微软雅黑，苹果设备上是苹方。用作对照基准'
     }
   };
-  const ORDER = ['wenkai', 'xihei', 'zhisong', 'system'];
+  const ORDER = ['wenkai', 'xihei', 'zhisong', 'misans', 'harmony', 'system'];
+  const WEB = ORDER.filter(k => FONTS[k].prefix);
   const TIERS = ['a', 'b1', 'b2'];
+  const WN = { 300: 'Light', 400: 'Regular', 500: 'Medium', 700: 'Bold' };
   const LATIN = { own: '', inter: '"Inter", ', manrope: '"Manrope", ' };
   const MIZI = {
     '永': '永字八法 · 侧 勒 努 趯 策 掠 啄 磔',
@@ -2315,10 +2373,14 @@ The quick brown fox jumps over the lazy dog. 0123456789
     $('#f-weights').textContent = f.weightText;
     $('#glist-font').textContent = f.name;
     $$('.phone-font').forEach(e => { e.textContent = f.name; });
-    $('#synth-title').textContent = `${f.name}的加粗方式：${state.font === 'wenkai' ? '700 会在 Medium 上再合成一次' : state.font === 'system' ? '系统字体一般自带粗体' : '只有 Regular，700 全靠合成'}`;
-    $('#pref-wk-note').textContent = state.font === 'wenkai' ? `当前 ${state.wk}` : '仅文楷有三个字重';
+    const sp = /[A-Za-z]$/.test(f.name) ? ' ' : '';
+    $('#synth-title').textContent = `${f.name}${sp}的加粗方式：${f.weights.includes(700) ? '自带 Bold，700 不用合成' : state.font === 'wenkai' ? '700 会在 Medium 上再合成一次' : state.font === 'system' ? '系统字体一般自带粗体' : '只有 Regular，700 全靠合成'}`;
+    $('#pref-wk-note').textContent = state.font === 'wenkai' ? `当前 ${state.wk}` : '仅对文楷生效';
 
-    $$('.wk-fixed').forEach(e => { e.style.fontFamily = stackFor('wenkai'); });
+    // Show the selected font's own weights; single-weight fonts and the system font fall back to WenKai.
+    const wf = f.weights.length > 1 ? state.font : 'wenkai';
+    $('#weights-sub').textContent = wf === state.font ? `${f.name}${sp}本页取了 ${f.weights.length} 个字重` : state.font === 'system' ? '系统字体的字重取决于设备，这里换成文楷的三个字重' : `${f.name}只有一个字重，这里换成文楷的三个字重`;
+    $('#own-weights').innerHTML = FONTS[wf].weights.map(w => `<div class="w-row"><span class="meta">${WN[w]} ${w}</span><p style="font-weight:${w};font-family:${esc(stackFor(wf))}">永和九年，岁在癸丑 Aa 123</p></div>`).join('');
     $$('[data-font-sample]').forEach(e => { e.style.fontFamily = stackFor(e.dataset.fontSample, { noLatin: true }); });
     $$('.cmp').forEach(c => {
       const k = c.dataset.cmp;
@@ -2444,8 +2506,7 @@ The quick brown fox jumps over the lazy dog. 0123456789
     const typing = e.target.closest('input, textarea, select, [contenteditable="true"]');
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); $('#search-input').focus(); $('#search-input').select(); return; }
     if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
-    const i = ['1', '2', '3', '4'].indexOf(e.key);
-    if (i >= 0) setFont(ORDER[i]);
+    if (/^[1-9]$/.test(e.key) && ORDER[e.key - 1]) setFont(ORDER[e.key - 1]);
   });
 
   /* ---------- Scrollspy ---------- */
@@ -2808,7 +2869,7 @@ The quick brown fox jumps over the lazy dog. 0123456789
     if (!manifest) return;
     const groups = [];
     let max = 0, all = 0;
-    for (const k of ['wenkai', 'xihei', 'zhisong']) {
+    for (const k of WEB) {
       const rows = FONTS[k].weights.map(w => {
         const t = TIERS.map(tier => ({ tier, id: fileId(k, w, tier), b: (manifest.files[fileId(k, w, tier)] || {}).bytes || 0 }));
         const sum = t.reduce((s, x) => s + x.b, 0);
@@ -2819,13 +2880,12 @@ The quick brown fox jumps over the lazy dog. 0123456789
     }
     const mono = manifest.files['mono-400-a'];
     if (mono) all += mono.bytes;
-    const wn = { 300: 'Light', 400: 'Regular', 500: 'Medium' };
     $('#sizes').innerHTML = groups.map(g => `<div class="sz-group"><b style="font-family:${esc(stackFor(g.k, { noLatin: true }))}">${FONTS[g.k].name}</b>${g.rows.map(r => {
       const done = r.t.filter(x => recs.get(x.id)?.status === 'ready').map(x => x.tier);
-      return `<div class="sz-row"><span class="meta">${wn[r.w]}</span><span class="sz-track" title="${r.t.map(x => x.tier.toUpperCase() + ' ' + fmtMB(x.b)).join(' / ')}">${r.t.map(x => `<i class="${x.tier}" style="width:${(x.b / max * 100).toFixed(2)}%"></i>`).join('')}</span><span class="sz-val">${fmtMB(r.sum)} · 已载 ${done.length}/3</span></div>`;
+      return `<div class="sz-row"><span class="meta">${WN[r.w]}</span><span class="sz-track" title="${r.t.map(x => x.tier.toUpperCase() + ' ' + fmtMB(x.b)).join(' / ')}">${r.t.map(x => `<i class="${x.tier}" style="width:${(x.b / max * 100).toFixed(2)}%"></i>`).join('')}</span><span class="sz-val">${fmtMB(r.sum)} · 已载 ${done.length}/3</span></div>`;
     }).join('')}</div>`).join('') + (mono ? `<div class="sz-row"><span class="meta">文楷 Mono</span><span class="sz-track"><i class="a" style="width:${(mono.bytes / max * 100).toFixed(2)}%"></i></span><span class="sz-val">${fmtMB(mono.bytes)} · 已载 ${recs.get('mono-400-a')?.status === 'ready' ? 1 : 0}/1</span></div>` : '');
     $('#sizes-total').textContent = 'TOTAL ' + fmtMB(all);
-    for (const k of ['wenkai', 'xihei', 'zhisong']) {
+    for (const k of WEB) {
       const el = $(`[data-lic-size="${k}"]`);
       const g = groups.find(x => x.k === k);
       const sum = g.rows.reduce((s, r) => s + r.sum, 0);
@@ -2848,7 +2908,7 @@ The quick brown fox jumps over the lazy dog. 0123456789
       const id = en.target.id;
       if (id === 'weights-card') loadTier('wenkai', [300, 400, 500], 'a');
       if (id === 'code-card') loadFile('mono-400-a');
-      if (id === 'compare' || id === 'license' || id === 'forms') ['wenkai', 'xihei', 'zhisong'].forEach(k => loadFile(fileId(k, 400, 'a')));
+      if (id === 'compare' || id === 'license' || id === 'forms') WEB.forEach(k => loadFile(fileId(k, 400, 'a')));
       lazy.unobserve(en.target);
     });
   }, { rootMargin: '400px 0px' });
@@ -2860,7 +2920,7 @@ The quick brown fox jumps over the lazy dog. 0123456789
     const data = JSON.parse($('#font-data').textContent);
     manifest = data.manifest;
     EMBED = data.embed || {};
-    for (const k of ['wenkai', 'xihei', 'zhisong']) {
+    for (const k of WEB) {
       const t = manifest.fonts[k].tiers;
       cover[k] = { a: new Set(t.a), b1: new Set(t.b1), b2: new Set(t.b2) };
     }
@@ -2869,7 +2929,8 @@ The quick brown fox jumps over the lazy dog. 0123456789
     ['weights-card', 'code-card', 'compare', 'license', 'forms'].forEach(id => { const el = document.getElementById(id); if (el) lazy.observe(el); });
     const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1200));
     const first = recs.get(fileId(state.font, weightsInUse(state.font)[0], 'a'));
-    (first ? first.promise : Promise.resolve()).then(() => idle(() => ['wenkai', 'xihei', 'zhisong'].forEach(k => loadFile(fileId(k, 400, 'a')))));
+    // Only warm up faces already inside the page; the rest cost a download and wait until they scroll into view.
+    (first ? first.promise : Promise.resolve()).then(() => idle(() => WEB.filter(k => EMBED[fileId(k, 400, 'a')]).forEach(k => loadFile(fileId(k, 400, 'a')))));
   } catch (err) {
     $('#load-pill').dataset.state = 'error';
     $('#load-text').textContent = '字体数据损坏';

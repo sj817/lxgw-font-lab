@@ -1,14 +1,16 @@
 """Build the font lab into dist/.
 
-1. Download the pinned TTFs listed in fonts.json from upstream GitHub Releases
-   into .cache/fonts/ and check their sha256.
+1. Download the pinned TTFs listed in fonts.json into .cache/fonts/ and check
+   their sha256. LXGW fonts come from GitHub Releases; MiSans and HarmonyOS
+   Sans only ship as one zip each, so those get unpacked and the zip dropped.
 2. Cut every face into three woff2 tiers:
      a  = everything the page itself shows + Latin/punctuation/symbol blocks
      b1 = GB2312 level 1 minus a
      b2 = GB2312 level 2 minus a and b1
    Mono gets one file: ASCII-ish blocks + the characters inside <pre>/<kbd>.
-3. Embed tier a (and mono) into index.html as base64, so the first paint needs
-   no extra request; b1/b2 stay as files next to it and load on demand.
+3. Embed the LXGW tier a (and mono) into index.html as base64, so the first
+   paint needs no extra request; everything else stays as files next to it
+   and loads on demand.
 """
 import base64
 import datetime
@@ -21,6 +23,7 @@ import shutil
 import sys
 import time
 import urllib.request
+import zipfile
 from concurrent.futures import ProcessPoolExecutor
 
 from fontTools import subset
@@ -38,8 +41,17 @@ FACES = [
     ('wenkai', 500, 'LXGWWenKai-Medium.ttf', 'lxgw-wenkai'),
     ('xihei', 400, 'LXGWNeoXiHei.ttf', 'lxgw-neoxihei'),
     ('zhisong', 400, 'LXGWNeoZhiSong.ttf', 'lxgw-neozhisong'),
+    ('misans', 400, 'MiSans-Regular.ttf', 'misans'),
+    ('misans', 500, 'MiSans-Medium.ttf', 'misans'),
+    ('misans', 700, 'MiSans-Bold.ttf', 'misans'),
+    ('harmony', 400, 'HarmonyOS_Sans_SC_Regular.ttf', 'harmonyos-sans'),
+    ('harmony', 500, 'HarmonyOS_Sans_SC_Medium.ttf', 'harmonyos-sans'),
+    ('harmony', 700, 'HarmonyOS_Sans_SC_Bold.ttf', 'harmonyos-sans'),
 ]
 MONO = ('LXGWWenKaiMono-Regular.ttf', 'lxgw-wenkai-mono')
+# Faces whose tier a rides inside index.html. MiSans and HarmonyOS Sans keep theirs
+# as files: six more embedded faces would more than double the page.
+EMBED = {'wenkai', 'xihei', 'zhisong', 'mono'}
 
 BASIC_RANGES = [
     (0x20, 0x7E), (0xA0, 0x24F), (0x2B0, 0x2FF), (0x300, 0x36F), (0x370, 0x3FF), (0x400, 0x4FF),
@@ -60,31 +72,54 @@ def sha256(path):
     return h.hexdigest()
 
 
+def download(url, path):
+    for attempt in range(3):
+        try:
+            print(f'download {url}', flush=True)
+            with urllib.request.urlopen(url, timeout=60) as res, open(path, 'wb') as f:
+                shutil.copyfileobj(res, f, 1 << 20)
+            return
+        except OSError as e:
+            if attempt == 2:
+                raise
+            print(f'  retry after {e}', flush=True)
+            time.sleep(3)
+
+
+def accept(path, digest):
+    got = sha256(path + '.part')
+    if got != digest:
+        os.remove(path + '.part')
+        sys.exit(f'sha256 mismatch for {os.path.basename(path)}: got {got}, want {digest}')
+    os.replace(path + '.part', path)
+
+
 def fetch_fonts():
     lock = json.load(open(os.path.join(ROOT, 'fonts.json'), encoding='utf-8'))
     os.makedirs(CACHE, exist_ok=True)
-    for repo, rel in lock.items():
+    for src, rel in lock.items():
+        # Keys of `files` are file names for GitHub Releases and member paths for zips.
+        todo = {}
         for name, digest in rel['files'].items():
-            path = os.path.join(CACHE, name)
-            if os.path.exists(path) and sha256(path) == digest:
-                continue
-            url = f'https://github.com/{repo}/releases/download/{rel["tag"]}/{name}'
-            for attempt in range(3):
-                try:
-                    print(f'download {url}', flush=True)
-                    with urllib.request.urlopen(url, timeout=60) as res, open(path + '.part', 'wb') as f:
+            path = os.path.join(CACHE, os.path.basename(name))
+            if not (os.path.exists(path) and sha256(path) == digest):
+                todo[name] = (path, digest)
+        if not todo:
+            continue
+        if 'url' in rel:
+            # The upstream zip URL is not versioned, so only the TTFs we cut are pinned.
+            zpath = os.path.join(CACHE, os.path.basename(rel['url']) + '.part')
+            download(rel['url'], zpath)
+            with zipfile.ZipFile(zpath) as zf:
+                for member, (path, digest) in todo.items():
+                    with zf.open(member) as res, open(path + '.part', 'wb') as f:
                         shutil.copyfileobj(res, f, 1 << 20)
-                    break
-                except OSError as e:
-                    if attempt == 2:
-                        raise
-                    print(f'  retry after {e}', flush=True)
-                    time.sleep(3)
-            got = sha256(path + '.part')
-            if got != digest:
-                os.remove(path + '.part')
-                sys.exit(f'sha256 mismatch for {name}: got {got}, want {digest}')
-            os.replace(path + '.part', path)
+                    accept(path, digest)
+            os.remove(zpath)
+        else:
+            for name, (path, digest) in todo.items():
+                download(f'https://github.com/{src}/releases/download/{rel["tag"]}/{name}', path + '.part')
+                accept(path, digest)
     return lock
 
 
@@ -139,10 +174,12 @@ def build_date():
 def main():
     lock = fetch_fonts()
     html = open(TEMPLATE, encoding='utf-8').read()
-    for repo, rel in lock.items():
+    for src, rel in lock.items():
         # The license cards on the page spell out each version; keep them in step with fonts.json.
-        if rel['tag'] not in html:
-            sys.exit(f'src/index.html does not mention {repo} {rel["tag"]}: update the license section')
+        # The lookahead keeps "v1.0" from matching inside "v1.067".
+        ver = rel.get('tag') or rel['version']
+        if not re.search(re.escape(ver) + r'(?![.\d])', html):
+            sys.exit(f'src/index.html does not mention {src} {ver}: update the license section')
 
     shutil.rmtree(DIST, ignore_errors=True)
     os.makedirs(os.path.join(DIST, 'fonts'))
@@ -193,10 +230,10 @@ def main():
     total = sum(m['bytes'] for m in manifest['files'].values())
     print(f'total {total / 1048576:.2f} MB')
 
-    # Tier a and mono ride inside the HTML; b1/b2 stay as files next to it.
+    # LXGW tier a and mono ride inside the HTML; the rest stay as files next to it.
     embed = {}
     for fid, meta in manifest['files'].items():
-        if fid.endswith('-a'):
+        if fid.endswith('-a') and fid.split('-')[0] in EMBED:
             path = os.path.join(DIST, meta['file'])
             embed[fid] = base64.b64encode(open(path, 'rb').read()).decode('ascii')
             os.remove(path)
